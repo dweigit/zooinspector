@@ -34,6 +34,10 @@ public class JsonFormatTool {
                     result.append('\n');
                     result.append(indent(number));
                 }
+                if (result.lastIndexOf(":")<result.lastIndexOf("\"")) {
+                    result.append(json.charAt(i));
+                    continue;
+                }
                 //（2）打印：当前字符。
                 result.append(key);
                 //（3）前方括号、前花括号，的后面必须换行。打印：换行。
@@ -47,6 +51,10 @@ public class JsonFormatTool {
 
             //3、如果当前字符是后方括号、后花括号做如下处理：
             if ((key == ']') || (key == '}')) {
+                if ((i + 1 < length) && (json.charAt(i + 1) == '"')) {
+                    result.append(json.charAt(i));
+                    continue;
+                }
                 //（1）后方括号、后花括号，的前面必须换行。打印：换行。
                 result.append('\n');
                 //（2）每出现一次后方括号、后花括号；缩进次数减少一次。打印：缩进。
