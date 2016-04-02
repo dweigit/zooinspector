@@ -1,5 +1,5 @@
-zooinspector
-============
+zooinspector@dwei
+=================
 
 An improved zookeeper inspector
 
@@ -11,7 +11,7 @@ An improved zookeeper inspector
 - Support read-only mode for node data viewer
 
 Build
-- $git clone https://github.com/zzhang5/zooinspector.git
+- $git clone https://github.com/dweigit/zooinspector.git
 - $cd zooinspector/
 - $mvn clean package
 
