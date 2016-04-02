@@ -31,12 +31,14 @@ import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.apache.zookeeper.inspector.logger.LoggerFactory;
 
 /**
  * The About Dialog for the application
  */
 public class ZooInspectorAboutDialog extends JDialog {
+    private static final Logger logger = Logger.getLogger(ZooInspectorAboutDialog.class);
     /**
      * @param frame
      *            - the Frame from which the dialog is displayed
@@ -44,8 +46,7 @@ public class ZooInspectorAboutDialog extends JDialog {
     public ZooInspectorAboutDialog(Frame frame) {
         super(frame);
         this.setLayout(new BorderLayout());
-        this.setIconImage(ZooInspectorIconResources.getInformationIcon()
-                .getImage());
+        this.setIconImage(ZooInspectorIconResources.getInformationIcon().getImage());
         this.setTitle("About ZooInspector");
         this.setModal(true);
         this.setAlwaysOnTop(true);
@@ -55,18 +56,14 @@ public class ZooInspectorAboutDialog extends JDialog {
         JEditorPane aboutPane = new JEditorPane();
         aboutPane.setEditable(false);
         aboutPane.setOpaque(false);
-//        java.net.URL aboutURL = ZooInspectorAboutDialog.class
-//                .getResource("about.html");
-
         try {
             URL aboutURL = Thread.currentThread().getContextClassLoader().getResource("about.html");
             aboutPane.setPage(aboutURL);
         } catch (IOException e) {
-            LoggerFactory.getLogger().error(
-                    "Error loading about.html, file may be corrupt", e);
+            logger.error("Error loading about.html, file may be corrupt", e);
         }
         panel.add(aboutPane, BorderLayout.CENTER);
-        panel.setPreferredSize(new Dimension(600, 200));
+        panel.setPreferredSize(new Dimension(600, 260));
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton okButton = new JButton("OK");

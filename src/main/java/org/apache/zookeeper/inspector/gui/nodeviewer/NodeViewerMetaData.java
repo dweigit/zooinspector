@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,6 +22,9 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +36,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingWorker;
 
+import org.apache.log4j.Logger;
 import org.apache.zookeeper.data.Stat;
 import org.apache.zookeeper.inspector.logger.LoggerFactory;
 import org.apache.zookeeper.inspector.manager.ZooInspectorNodeManager;
@@ -43,13 +47,14 @@ import org.apache.zookeeper.inspector.manager.ZooInspectorNodeManager;
  * node
  */
 public class NodeViewerMetaData extends ZooInspectorNodeViewer {
+    private static final Logger logger = Logger.getLogger(NodeViewerMetaData.class);
     private ZooInspectorNodeManager zooInspectorManager;
     private final JPanel metaDataPanel;
     // private String selectedNode;
 
     /**
-	 * 
-	 */
+     *
+     */
     public NodeViewerMetaData() {
         this.setLayout(new BorderLayout());
         this.metaDataPanel = new JPanel();
@@ -88,8 +93,7 @@ public class NodeViewerMetaData extends ZooInspectorNodeViewer {
 
                 @Override
                 protected Map<String, String> doInBackground() throws Exception {
-                    return NodeViewerMetaData.this.zooInspectorManager
-                            .getNodeMeta(selectedNode);
+                    return NodeViewerMetaData.this.zooInspectorManager.getNodeMeta(selectedNode);
                 }
 
                 @Override
@@ -99,19 +103,11 @@ public class NodeViewerMetaData extends ZooInspectorNodeViewer {
                         data = get();
                     } catch (InterruptedException e) {
                         data = new HashMap<String, String>();
-                        LoggerFactory.getLogger().error(
-                                "Error retrieving meta data for node: "
-                                        + selectedNode,
-                                e);
+                        logger.error("Error retrieving meta data for node: "+ selectedNode,e);
                     } catch (ExecutionException e) {
                         data = new HashMap<String, String>();
-                        LoggerFactory.getLogger().error(
-                                "Error retrieving meta data for node: "
-                                        + selectedNode,
-                                e);
+                        logger.error("Error retrieving meta data for node: "+ selectedNode,e);
                     }
-//                    NodeViewerMetaData.this.metaDataPanel
-//                            .setLayout(new GridBagLayout());
                     JPanel infoPanel = new JPanel();
                     infoPanel.setBackground(Color.WHITE);
                     infoPanel.setLayout(new GridBagLayout());
@@ -120,7 +116,18 @@ public class NodeViewerMetaData extends ZooInspectorNodeViewer {
                     for (Map.Entry<String, String> entry : data.entrySet()) {
                         rowPos = 2 * i + 1;
                         JLabel label = new JLabel(entry.getKey());
-                        JTextField text = new JTextField(entry.getValue());
+                        String val =  entry.getValue();
+                        if(entry.getKey().contains("Time")){
+                            try {
+                                SimpleDateFormat sFormat1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+                                SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                                Date date = sFormat1.parse(val);
+                                val = sFormat.format(date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        JTextField text = new JTextField(val==null?entry.getValue():val);
                         text.setEditable(false);
                         GridBagConstraints c1 = new GridBagConstraints();
                         c1.gridx = 0;
@@ -164,7 +171,7 @@ public class NodeViewerMetaData extends ZooInspectorNodeViewer {
                     c.ipady = 0;
                     NodeViewerMetaData.this.metaDataPanel.add(infoPanel, c);
                     NodeViewerMetaData.this.metaDataPanel.revalidate();
-                    NodeViewerMetaData.this.metaDataPanel.repaint();                    
+                    NodeViewerMetaData.this.metaDataPanel.repaint();
                 }
             };
             worker.execute();
@@ -180,8 +187,7 @@ public class NodeViewerMetaData extends ZooInspectorNodeViewer {
      * (org.apache.zookeeper.inspector.manager.ZooInspectorNodeManager)
      */
     @Override
-    public void setZooInspectorManager(
-            ZooInspectorNodeManager zooInspectorManager) {
+    public void setZooInspectorManager(ZooInspectorNodeManager zooInspectorManager) {
         this.zooInspectorManager = zooInspectorManager;
     }
 

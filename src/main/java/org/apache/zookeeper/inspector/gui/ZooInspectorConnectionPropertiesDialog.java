@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -56,14 +56,11 @@ public class ZooInspectorConnectionPropertiesDialog extends JDialog {
     private final HashMap<String, JComponent> components;
 
     /**
-     * @param lastConnectionProps
-     *            - the last connection properties used. if this is the first
-     *            connection since starting the applications this will be the
-     *            default settings
-     * @param connectionPropertiesTemplateAndLabels
-     *            - the connection properties and labels to show in this dialog
-     * @param zooInspectorPanel
-     *            - the {@link ZooInspectorPanel} linked to this dialog
+     * @param lastConnectionProps                   - the last connection properties used. if this is the first
+     *                                              connection since starting the applications this will be the
+     *                                              default settings
+     * @param connectionPropertiesTemplateAndLabels - the connection properties and labels to show in this dialog
+     * @param zooInspectorPanel                     - the {@link ZooInspectorPanel} linked to this dialog
      */
     public ZooInspectorConnectionPropertiesDialog(
             Properties lastConnectionProps,
@@ -71,8 +68,7 @@ public class ZooInspectorConnectionPropertiesDialog extends JDialog {
             final ZooInspectorPanel zooInspectorPanel) {
         final Map<String, List<String>> connectionPropertiesTemplate = connectionPropertiesTemplateAndLabels
                 .getKey();
-        final Map<String, String> connectionPropertiesLabels = connectionPropertiesTemplateAndLabels
-                .getValue();
+        final Map<String, String> connectionPropertiesLabels = connectionPropertiesTemplateAndLabels.getValue();
         this.setLayout(new BorderLayout());
         this.setTitle("Connection Settings");
         this.setModal(true);
@@ -88,11 +84,9 @@ public class ZooInspectorConnectionPropertiesDialog extends JDialog {
         final JButton cancelButton = new JButton("Cancel");
 
         components = new HashMap<String, JComponent>();
-        for (Entry<String, List<String>> entry : connectionPropertiesTemplate
-                .entrySet()) {
+        for (Entry<String, List<String>> entry : connectionPropertiesTemplate.entrySet()) {
             int rowPos = 2 * i + 1;
-            JLabel label = new JLabel(connectionPropertiesLabels.get(entry
-                    .getKey()));
+            JLabel label = new JLabel(connectionPropertiesLabels.get(entry.getKey()));
             GridBagConstraints c1 = new GridBagConstraints();
             c1.gridx = 0;
             c1.gridy = rowPos;
@@ -127,23 +121,27 @@ public class ZooInspectorConnectionPropertiesDialog extends JDialog {
 
                 // accepts enter = "OK" button, escape = "cancel"
                 text.addKeyListener(new KeyListener() {
-                  @Override
-                  public void keyTyped(KeyEvent e) { }
-                  @Override
-                  public void keyReleased(KeyEvent e) { }
-                  @Override
-                  public void keyPressed(KeyEvent e) {
-                    switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ENTER:
-                      okButton.doClick();
-                      break;
-                    case KeyEvent.VK_ESCAPE:
-                      cancelButton.doClick();
-                      break;
-                    default:
-                      break;
+                    @Override
+                    public void keyTyped(KeyEvent e) {
                     }
-                  }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        switch (e.getKeyCode()) {
+                            case KeyEvent.VK_ENTER:
+                                okButton.doClick();
+                                break;
+                            case KeyEvent.VK_ESCAPE:
+                                cancelButton.doClick();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 });
 
                 GridBagConstraints c2 = new GridBagConstraints();
@@ -162,29 +160,32 @@ public class ZooInspectorConnectionPropertiesDialog extends JDialog {
                 components.put(entry.getKey(), text);
             } else {
                 List<String> list = entry.getValue();
-                JComboBox combo = new JComboBox(list.toArray(new String[list
-                        .size()]));
+                JComboBox combo = new JComboBox(list.toArray(new String[list.size()]));
                 combo.setEditable(true);
                 combo.setSelectedItem(list.get(0));
 
                 combo.getEditor().getEditorComponent().addKeyListener(new KeyListener() {
-                  @Override
-                  public void keyTyped(KeyEvent e) { }
-                  @Override
-                  public void keyReleased(KeyEvent e) { }
-                  @Override
-                  public void keyPressed(KeyEvent e) {
-                    switch (e.getKeyCode()) {
-                    case KeyEvent.VK_ENTER:
-                      okButton.doClick();
-                      break;
-                    case KeyEvent.VK_ESCAPE:
-                      cancelButton.doClick();
-                      break;
-                    default:
-                      break;
+                    @Override
+                    public void keyTyped(KeyEvent e) {
                     }
-                  }
+
+                    @Override
+                    public void keyReleased(KeyEvent e) {
+                    }
+
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        switch (e.getKeyCode()) {
+                            case KeyEvent.VK_ENTER:
+                                okButton.doClick();
+                                break;
+                            case KeyEvent.VK_ESCAPE:
+                                cancelButton.doClick();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 });
 
                 GridBagConstraints c2 = new GridBagConstraints();
@@ -369,9 +370,7 @@ public class ZooInspectorConnectionPropertiesDialog extends JDialog {
             if (component instanceof JTextField) {
                 value = ((JTextField) component).getText();
             } else if (component instanceof JComboBox) {
-              // value = ((JComboBox) component).getSelectedItem().toString();
-              value = ((JComboBox) component).getEditor().getItem().toString();
-              // System.out.println("getConnectionProps#value: " + value);
+                value = ((JComboBox) component).getEditor().getItem().toString();
             }
             connectionProps.put(entry.getKey(), value);
         }

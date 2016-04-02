@@ -20,18 +20,18 @@ under the License.
 <assembly>
   <id>pkg</id>
   <formats>
-    <format>tar</format>
+    <format>tar.gz</format>
   </formats>
   <fileSets>
     <fileSet>
-      <directory>${project.build.directory}/${project.artifactId}-pkg/bin</directory>
+      <directory>${project.build.directory}/${project.artifactId}/bin</directory>
       <outputDirectory>bin</outputDirectory>
       <lineEnding>unix</lineEnding>
       <fileMode>0755</fileMode>
       <directoryMode>0755</directoryMode>
     </fileSet>
     <fileSet>
-      <directory>${project.build.directory}/${project.artifactId}-pkg/repo/</directory>
+      <directory>${project.build.directory}/${project.artifactId}/repo/</directory>
       <outputDirectory>repo</outputDirectory>
       <fileMode>0755</fileMode>
       <directoryMode>0755</directoryMode>
@@ -40,7 +40,7 @@ under the License.
       </excludes>
     </fileSet>
      <fileSet>
-      <directory>${project.build.directory}/${project.artifactId}-pkg/conf</directory>
+      <directory>${project.build.directory}/${project.artifactId}/conf</directory>
       <outputDirectory>conf</outputDirectory>
       <lineEnding>unix</lineEnding>
       <fileMode>0755</fileMode>

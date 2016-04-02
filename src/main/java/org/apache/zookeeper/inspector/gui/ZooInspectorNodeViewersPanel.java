@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,19 +17,19 @@
  */
 package org.apache.zookeeper.inspector.gui;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
+import org.apache.zookeeper.inspector.gui.nodeviewer.NodeViewerData;
 import org.apache.zookeeper.inspector.gui.nodeviewer.ZooInspectorNodeViewer;
 import org.apache.zookeeper.inspector.manager.ZooInspectorManager;
 import org.apache.zookeeper.inspector.manager.ZooInspectorNodeManager;
@@ -37,8 +37,7 @@ import org.apache.zookeeper.inspector.manager.ZooInspectorNodeManager;
 /**
  * This is the {@link JPanel} which contains the {@link ZooInspectorNodeViewer}s
  */
-public class ZooInspectorNodeViewersPanel extends JPanel implements
-        TreeSelectionListener, ChangeListener {
+public class ZooInspectorNodeViewersPanel extends JPanel implements TreeSelectionListener, ChangeListener {
 
     private final List<ZooInspectorNodeViewer> nodeVeiwers = new ArrayList<ZooInspectorNodeViewer>();
     private final List<Boolean> needsReload = new ArrayList<Boolean>();
@@ -52,21 +51,13 @@ public class ZooInspectorNodeViewersPanel extends JPanel implements
      * @param nodeVeiwers
      *            - the {@link ZooInspectorNodeViewer}s to show
      */
-    public ZooInspectorNodeViewersPanel(
-            ZooInspectorNodeManager zooInspectorManager,
-            List<ZooInspectorNodeViewer> nodeVeiwers) {
+    public ZooInspectorNodeViewersPanel(ZooInspectorNodeManager zooInspectorManager, List<ZooInspectorNodeViewer> nodeVeiwers) {
         this.zooInspectorManager = zooInspectorManager;
         this.setLayout(new BorderLayout());
-        tabbedPane = new JTabbedPane(JTabbedPane.TOP,
-                JTabbedPane.WRAP_TAB_LAYOUT);
+        tabbedPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.WRAP_TAB_LAYOUT);
         setNodeViewers(nodeVeiwers);
         tabbedPane.addChangeListener(this);
         this.add(tabbedPane, BorderLayout.CENTER);
-
-        // debug
-//        this.setVisible(true);
-//        tabbedPane.setVisible(true);
-
         reloadSelectedViewer();
     }
 
@@ -107,23 +98,8 @@ public class ZooInspectorNodeViewersPanel extends JPanel implements
     @Override
     public void valueChanged(TreeSelectionEvent e) {
         long start = System.currentTimeMillis();
-
         TreePath[] paths = e.getPaths();
         System.out.println("TreeSelectionListener#valueChanged() invoked. paths: " + Arrays.toString(paths));
-//        if (paths != null && paths.length > 0) {
-//          List<String> selectedPaths = ZooInspectorUtil.treePathToZnodePath(paths);
-//          System.out.println("selectedPath: " + selectedPaths);
-//
-//          try
-//          {
-//            zooInspectorManager.getCache().refresh(selectedPaths, 0);
-//          }
-//          catch (KeeperException e1)
-//          {
-//            e1.printStackTrace();
-//          }
-//        }
-
         selectedNodes.clear();
         for (TreePath path : paths) {
             boolean appended = false;
@@ -151,7 +127,11 @@ public class ZooInspectorNodeViewersPanel extends JPanel implements
         reloadSelectedViewer();
         long end = System.currentTimeMillis();
         System.out.println("\t valueChanged#selectedNodes: " + selectedNodes);
-        System.out.println("\t ZooInspectorNodeViewersPanel#valueChanged() took: " + (end-start));
+        System.out.println("\t ZooInspectorNodeViewersPanel#valueChanged() took: " + (end - start));
+
+        NodeViewerData nodeViewPanel = (NodeViewerData) (nodeVeiwers.get(0));
+        nodeViewPanel.getFormatButton().getModel().setSelected(false);
+        nodeViewPanel.getPathLabel().setText("    path:"+selectedNodes.get(0).toString());
     }
 
     /*
@@ -163,8 +143,7 @@ public class ZooInspectorNodeViewersPanel extends JPanel implements
      */
     @Override
     public void stateChanged(ChangeEvent e) {
-      System.out.println("ZooInspectorNodeViewersPanel.stateChanged()");
-
+        System.out.println("ZooInspectorNodeViewersPanel.stateChanged()");
         reloadSelectedViewer();
     }
 }

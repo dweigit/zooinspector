@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,16 +17,15 @@
  */
 package org.apache.zookeeper.inspector;
 
-import java.awt.Dimension;
-import java.awt.DisplayMode;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Enumeration;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
 
 import org.apache.zookeeper.inspector.gui.ZooInspectorPanel;
 import org.apache.zookeeper.inspector.logger.LoggerFactory;
@@ -36,29 +35,16 @@ import org.apache.zookeeper.inspector.manager.ZooInspectorManagerImpl;
  *
  */
 public class ZooInspector {
-    /**
-     * @param args
-     *            - not used. The value of these parameters will have no effect
-     *            on the application
-     */
+
     public static void main(String[] args) {
+
         try {
-//          Dimension screenSize = getScreenResolution();
-//          int screenWidth = screenSize.width;
-//          int screenHeight = screenSize.height;
-          // System.out.println("screenWidth: " + screenWidth + ", screenHeight: " + screenHeight);
-
-
+            initGlobalFont(new Font("Microsoft YaHei", Font.PLAIN, 12));  //统一设置字体
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             JFrame frame = new JFrame("ZooInspector");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-            // debug
-//            frame.setSize(screenWidth * 2 / 3, screenHeight);
-//            frame.setVisible(true);
-
-            final ZooInspectorPanel zooInspectorPanel = new ZooInspectorPanel(
-                    new ZooInspectorManagerImpl());
+            final ZooInspectorPanel zooInspectorPanel = new ZooInspectorPanel(new ZooInspectorManagerImpl());
             frame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
@@ -66,37 +52,44 @@ public class ZooInspector {
                     zooInspectorPanel.disconnect(true);
                 }
             });
-
             frame.setContentPane(zooInspectorPanel);
-            frame.setSize(1024, 768);
-//            frame.setSize(screenWidth * 2 / 3, screenHeight);
+
+            Dimension screenSize = getScreenResolution();
+            int screenWidth = screenSize.width;
+            int screenHeight = screenSize.height;
+            frame.setSize(screenWidth * 3 / 4, screenHeight * 3 / 4);
+            frame.setLocationRelativeTo(null);//设置窗口居中显示
             frame.setVisible(true);
         } catch (Exception e) {
-            LoggerFactory.getLogger().error(
-                    "Error occurred loading ZooInspector", e);
-            JOptionPane.showMessageDialog(null,
-                    "ZooInspector failed to start: " + e.getMessage(), "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            LoggerFactory.getLogger().error("Error occurred loading ZooInspector", e);
+            JOptionPane.showMessageDialog(null, "ZooInspector failed to start: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private static Dimension getScreenResolution()
-    {
-      GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-      GraphicsDevice[] screenDevices = ge.getScreenDevices();
-
-      for (int i = 0; i < screenDevices.length; i++) {
-        System.out.println(screenDevices[i].getIDstring());
-
-        DisplayMode dm = screenDevices[i].getDisplayMode();
-        int screenWidth = dm.getWidth();
-        int screenHeight = dm.getHeight();
-
-        System.out.println("Cake: " + screenWidth + " " + screenHeight);
-        return new Dimension(screenWidth, screenHeight);
-      }
-
-      return null;
+    private static Dimension getScreenResolution() {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] screenDevices = ge.getScreenDevices();
+        for (int i = 0; i < screenDevices.length; i++) {
+            DisplayMode dm = screenDevices[i].getDisplayMode();
+            int screenWidth = dm.getWidth();
+            int screenHeight = dm.getHeight();
+            return new Dimension(screenWidth, screenHeight);
+        }
+        return null;
     }
 
+    /**
+     * 统一设置字体，父界面设置之后，所有由父界面进入的子界面都不需要再次设置字体
+     */
+    private static void initGlobalFont(Font font) {
+        FontUIResource fontRes = new FontUIResource(font);
+        for (Enumeration<Object> keys = UIManager.getDefaults().keys();
+             keys.hasMoreElements(); ) {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if (value instanceof FontUIResource) {
+                UIManager.put(key, fontRes);
+            }
+        }
+    }
 }

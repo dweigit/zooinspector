@@ -6,9 +6,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,8 +31,7 @@ import javax.swing.JTextField;
  * A Manager for all interactions between the application and the Zookeeper
  * instance
  */
-public interface ZooInspectorManager extends ZooInspectorNodeManager,
-        ZooInspectorNodeTreeManager {
+public interface ZooInspectorManager extends ZooInspectorNodeManager, ZooInspectorNodeTreeManager {
 
     /**
      * @param connectionProps
@@ -67,7 +66,7 @@ public interface ZooInspectorManager extends ZooInspectorNodeManager,
      *            - the node listener for this watcher
      */
     public void addWatchers(Collection<String> selectedNodes,
-            NodeListener nodeListener);
+                            NodeListener nodeListener);
 
     /**
      * @param selectedNodes
@@ -96,7 +95,7 @@ public interface ZooInspectorManager extends ZooInspectorNodeManager,
      *             - if the configuration file cannot be saved
      */
     public void saveNodeViewersFile(File selectedFile,
-            List<String> nodeViewersClassNames) throws IOException;
+                                    List<String> nodeViewersClassNames) throws IOException;
 
     /**
      * @param nodeViewersClassNames

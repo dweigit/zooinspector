@@ -171,4 +171,12 @@ public class ZooInspectorIconResources {
         return new ImageIcon(readFully(in)); //$NON-NLS-1$
     }
 
+    /**
+     * @return format icon
+     */
+    public static ImageIcon getFormatIcon() {
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream("icons/format.png");
+        return new ImageIcon(readFully(in)); //$NON-NLS-1$
+    }
+
 }

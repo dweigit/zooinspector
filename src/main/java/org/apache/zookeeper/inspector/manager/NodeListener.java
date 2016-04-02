@@ -29,9 +29,7 @@ public interface NodeListener {
      * @param eventType
      *            - the event type
      * @param eventInfo
-     *            - a {@link Map} containing any other information about this
-     *            event
+     *            - a {@link Map} containing any other information about this event
      */
-    public void processEvent(String nodePath, String eventType,
-            Map<String, String> eventInfo);
+    public void processEvent(String nodePath, String eventType,Map<String, String> eventInfo);
 }
