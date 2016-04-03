@@ -29,14 +29,14 @@ public class JsonFormatTool {
             key = json.charAt(i);
             //2、如果当前字符是前方括号、前花括号做如下处理：
             if ((key == '[') || (key == '{')) {
+                if (result.lastIndexOf(":")<result.lastIndexOf("\"")) {
+                    result.append(json.charAt(i));
+                    continue;
+                }
                 //（1）如果前面还有字符，并且字符为“：”，打印：换行和缩进字符字符串。
                 if ((i - 1 > 0) && (json.charAt(i - 1) == ':')) {
                     result.append('\n');
                     result.append(indent(number));
-                }
-                if (result.lastIndexOf(":")<result.lastIndexOf("\"")) {
-                    result.append(json.charAt(i));
-                    continue;
                 }
                 //（2）打印：当前字符。
                 result.append(key);
@@ -55,6 +55,10 @@ public class JsonFormatTool {
                     result.append(json.charAt(i));
                     continue;
                 }
+                if (result.lastIndexOf(":")<result.lastIndexOf("\"") && (json.charAt(i - 1) != '}') && (json.charAt(i - 1) != ']')&& (json.charAt(i - 1) != '\"')) {
+                    result.append(json.charAt(i));
+                    continue;
+                }
                 //（1）后方括号、后花括号，的前面必须换行。打印：换行。
                 result.append('\n');
                 //（2）每出现一次后方括号、后花括号；缩进次数减少一次。打印：缩进。
@@ -63,7 +67,7 @@ public class JsonFormatTool {
                 //（3）打印：当前字符。
                 result.append(key);
                 //（4）如果当前字符后面还有字符，并且字符不为“，”，打印：换行。
-                if (((i + 1) < length) && (json.charAt(i + 1) != ',')) {
+                if (((i + 1) < length) && (json.charAt(i + 1) != ',') && (json.charAt(i + 1) != '}') && (json.charAt(i + 1) != ']')) {
                     result.append('\n');
                 }
                 //（5）继续下一次循环。
@@ -71,6 +75,10 @@ public class JsonFormatTool {
             }
             //4、如果当前字符是逗号。逗号后面换行，并缩进，不改变缩进次数。
             if ((key == ',')) {
+                if (!(json.charAt(i - 1) == '\"' || json.charAt(i - 1) == '}' || json.charAt(i - 1) != ']')) {
+                    result.append(json.charAt(i));
+                    continue;
+                }
                 result.append(key);
                 result.append('\n');
                 result.append(indent(number));
