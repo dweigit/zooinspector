@@ -194,8 +194,7 @@ public class ZooKeeperRetry extends ZooKeeper {
             try {
                 return super.getData(path, watch ? watcher : null, stat);
             } catch (KeeperException.ConnectionLossException e) {
-                LoggerFactory.getLogger().warn(
-                        "ZooKeeper connection lost.  Trying to reconnect.");
+                LoggerFactory.getLogger().warn("ZooKeeper connection lost.  Trying to reconnect.");
             }
         } while (!closed && (limit == -1 || count++ < limit));
         return null;
